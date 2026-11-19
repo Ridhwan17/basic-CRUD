@@ -1,26 +1,29 @@
 <?php
-// 1. Include database.php to get the $conn connection
 include 'database.php';
 
-// 2. Catch all 4 submitted values from $_POST ('gameID', 'title', 'genre', 'releaseYear')
-$id = $_POST['gameID'];
+// 1. Catch the old ID and the new values from $_POST
+$old_id = $_POST['old_gameID'];
+$new_id = $_POST['gameID'];
 $title = $_POST['title'];
 $genre = $_POST['genre'];
 $year = $_POST['releaseYear'];
 
-// 3. Write the SQL UPDATE command
-$sql = "UPDATE games SET title = '$title', genre='$genre', releaseYear='$year' WHERE gameID = '$id'";
+// 2. Try to update directly
+$sql = "UPDATE games 
+        SET gameID = '$new_id', title = '$title', genre = '$genre', releaseYear = '$year' 
+        WHERE gameID = '$old_id'";
 
-
-// 4. Execute mysqli_query($conn, $sql) inside an if/else block
-//    If true:  header("Location: list.php"); exit();
+// 3. Check the result
 if (mysqli_query($conn, $sql)) {
+    // Worked! Go back to list.php
     header("Location: list.php");
     exit();
+} elseif (mysqli_errno($conn) == 1062) {
+    // Error 1062 = Duplicate Primary Key!
+    echo "Warning: Game ID '$new_id' is already in the database! Changes cancelled.<br><br>";
+    echo "<a href='edit.php?id=$old_id'>Go back to Edit</a>";
+} else {
+    // Any other database error
+    echo "Error updating record: " . mysqli_error($conn);
 }
-//    If false: echo "Error updating record: " . mysqli_error($conn);
-else {
-    echo "Error updating record:" . mysqli_error($conn);
-}
-
 ?>
