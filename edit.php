@@ -21,7 +21,7 @@ $row = mysqli_fetch_assoc($result);
 <!-- 5. Create a form with action="update.php" and method="post" -->
 <form action="update.php" method="post">
     <!-- Hidden input remembers the original ID before the user edits it -->
-    <input type="hidden" name="ole_gameID" value="<?php echo $row['gameID']; ?>">
+    <input type="hidden" name="old_gameID" value="<?php echo $row['gameID']; ?>">
 
     Game ID: <input type="text" name="gameID" value="<?php echo $row['gameID']; ?>" required><br><br>
     Title: <input type="text" name="title" value="<?php echo $row['title']; ?>" required><br><br>
