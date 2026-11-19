@@ -15,7 +15,7 @@ $sql = "UPDATE games
 
 // 3. Check the result
 if (mysqli_query($conn, $sql)) {
-    // Worked! Go back to list.php
+    // Worked! no duplicate, Go back to list.php
     header("Location: list.php");
     exit();
 } elseif (mysqli_errno($conn) == 1062) {
